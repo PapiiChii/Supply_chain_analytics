@@ -138,7 +138,7 @@ def export_explainable_ai_visuals(model, X_train, X_test):
     plt.tight_layout()
     plt.savefig(os.path.join('visuals', 'feature_importance.png'), dpi=150)
     plt.close()
-    print("💾 Saved: visuals/feature_importance.png")
+    print("💾 Saved: visuals/feature.png")
     
     # 2. SHAP Summary Matrix Plot
     # Subsampling X_test for efficient processing in background runtime trees
@@ -152,7 +152,7 @@ def export_explainable_ai_visuals(model, X_train, X_test):
     plt.tight_layout()
     plt.savefig(os.path.join('visuals', 'shap_summary.png'), dpi=150)
     plt.close()
-    print("💾 Saved: visuals/shap_summary.png")
+    print("💾 Saved: visuals/shap.png")
 
 if __name__ == "__main__":
     raw_df = extract_analytical_cohort()
