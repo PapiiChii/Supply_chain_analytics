@@ -1,0 +1,31 @@
+-- ============================================================================
+-- Project: Olist Predictive Supply Chain Pipeline
+-- Script: extract_cohort.sql
+-- Description: Core analytical query extracting the balanced target cohort 
+--              and combining spatial and financial parameters across 
+--              relational schemas.
+-- Database: Supply_chain_analytics
+-- ============================================================================
+
+-- OPTIMIZATION STEP: Define indices locally to drastically speed up pipeline extraction
+CREATE INDEX IF NOT EXISTS idx_orders_status ON olist_orders_dataset (order_status);
+CREATE INDEX IF NOT EXISTS idx_items_order_id ON olist_order_items_dataset (order_id);
+CREATE INDEX IF NOT EXISTS idx_items_product_id ON olist_order_items_dataset (product_id);
+
+-- CORE DATA EXTRACTION
+SELECT
+    o.order_id,
+    o.order_status,
+    i.price,
+    i.freight_value,
+    p.product_weight_g,
+    p.product_length_cm,
+    p.product_height_cm,
+    p.product_width_cm,
+    p.product_category_name AS category
+FROM olist_orders_dataset o
+JOIN olist_order_items_dataset i 
+    ON o.order_id = i.order_id
+JOIN olist_products_dataset p 
+    ON i.product_id = p.product_id
+WHERE o.order_status IN ('delivered', 'canceled');
