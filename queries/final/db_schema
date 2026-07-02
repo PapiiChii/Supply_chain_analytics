@@ -1,0 +1,62 @@
+-- ============================================================================
+-- Project: Olist Predictive Supply Chain Pipeline
+-- Script: db_schema.sql
+-- Description: DDL (Data Definition Language) reflecting table definitions,
+--              primary keys, data types, and performance-tuning indices.
+-- Database: Supply_chain_analytics
+-- ============================================================================
+
+-- 1. Orders Dataset (Core Transaction Registry)
+CREATE TABLE IF NOT EXISTS olist_orders_dataset (
+    order_id VARCHAR(50) PRIMARY KEY,
+    customer_id VARCHAR(50) NOT NULL,
+    order_status VARCHAR(20) NOT NULL,
+    order_purchase_timestamp TIMESTAMP,
+    order_approved_at TIMESTAMP,
+    order_delivered_carrier_date TIMESTAMP,
+    order_delivered_customer_date TIMESTAMP,
+    order_estimated_delivery_date TIMESTAMP
+);
+
+-- Index to optimize status-based cohort extraction filters
+CREATE INDEX IF NOT EXISTS id_orders_status 
+ON olist_orders_dataset (order_status);
+
+
+-- 2. Products Catalog (Dimensional Dimensions & Physics)
+CREATE TABLE IF NOT EXISTS olist_products_dataset (
+    product_id VARCHAR(50) PRIMARY KEY,
+    product_category_name VARCHAR(100),
+    product_name_lenght INT,
+    product_description_lenght INT,
+    product_photos_qty INT,
+    product_weight_g NUMERIC(10, 2),
+    product_length_cm NUMERIC(10, 2),
+    product_height_cm NUMERIC(10, 2),
+    product_width_cm NUMERIC(10, 2)
+);
+
+
+-- 3. Order Items Ledger (Financial Line-Items & Foreign Keys)
+CREATE TABLE IF NOT EXISTS olist_order_items_dataset (
+    order_id VARCHAR(50),
+    order_item_id INT,
+    product_id VARCHAR(50),
+    seller_id VARCHAR(50),
+    shipping_limit_date TIMESTAMP,
+    price NUMERIC(10, 2) NOT NULL,
+    freight_value NUMERIC(10, 2) NOT NULL,
+    PRIMARY KEY (order_id, order_item_id),
+    CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES olist_orders_dataset(order_id),
+    CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES olist_products_dataset(product_id)
+);
+
+-- Indices to optimize relational JOIN paths across foreign keys
+CREATE INDEX IF NOT EXISTS idx_items_order_id ON olist_order_items_dataset (order_id);
+CREATE INDEX IF NOT EXISTS idx_items_product_id ON olist_order_items_dataset (product_id);
+
+-- 4. Product Category Name Translation
+CREATE TABLE product_category_name_translation (
+    product_category_name VARCHAR(100) PRIMARY KEY,
+    product_category_name_english VARCHAR(100)
+);
