@@ -8,9 +8,9 @@
 -- ============================================================================
 
 -- OPTIMIZATION STEP: Define indices locally to drastically speed up pipeline extraction
-CREATE INDEX IF NOT EXISTS idx_orders_status ON olist_orders_dataset (order_status);
-CREATE INDEX IF NOT EXISTS idx_items_order_id ON olist_order_items_dataset (order_id);
-CREATE INDEX IF NOT EXISTS idx_items_product_id ON olist_order_items_dataset (product_id);
+CREATE INDEX IF NOT EXISTS id_orders_status ON olist_orders_dataset (order_status);
+CREATE INDEX IF NOT EXISTS id_items_order_id ON olist_order_items_dataset (order_id);
+CREATE INDEX IF NOT EXISTS id_items_product_id ON olist_order_items_dataset (product_id);
 
 -- CORE DATA EXTRACTION
 SELECT
