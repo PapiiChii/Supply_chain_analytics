@@ -108,11 +108,11 @@ To remove the "black box" constraints of ensemble tree learning, SHAP (SHapley A
 #### 🏆 Risk Driver Rankings (Feature Importance)
 Absolute shipping economics govern user cancellation risks on the platform. The overall feature weights indicate that shipping costs (`freight_value`) and our engineered value proportions (`freight_ratio`) dictate **nearly 38%** of the model's total classification logic.
 
-![Feature Importance](feature.jpg)
+![Feature Importance](feature.jpg.png)
 #### 🧐 The Logistic Paradox (SHAP Summary Matrix Analysis)
 While traditional feature importance reveals *which* variables hold predictive weight, the SHAP beeswarm summary matrix exposes a fascinating marketplace anomaly regarding *how* those features influence the target output:
 
-![SHAP Summary Matrix](shap.jpg)
+![SHAP Summary Matrix](shap.jpg.png)
 
 *   **The Paradox:** High relative shipping costs typically signal financial friction. However, the SHAP matrix reveals that extreme, heavy freight costs (the prominent red clusters) actually push the prediction output significantly to the *left* of 0.0, mathematically driving down the cancellation probability and reinforcing a successful delivery outcome.
 *   **Operational Conclusion:** Within the Olist ecosystem, exceptionally large or high-freight orders frequently represent high-commitment B2B logistics or specialized consumer purchases (e.g., heavy machinery, large furniture) where buyers expect high shipping friction and rarely cancel. Conversely, standard consumer shipments with lower, baseline freight variables carry the highest volume of erratic buyer behavior and cancellation variance.
